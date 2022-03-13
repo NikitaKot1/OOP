@@ -10,9 +10,11 @@ typedef int err_type;
 #define FRAME_I_ERR 5
 #define NULLPTR_COORD 6
 #define UNKNOWN_TAG 7
+#define INP_ACT_ERR 8
 /**************************/
 #define TRANSFERE 1
 #define SCALE 2
 #define ROTATE 3
+#define PRINT 4
 
 #endif // CONSTANTS_H

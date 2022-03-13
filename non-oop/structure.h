@@ -1,6 +1,8 @@
 #ifndef STRUCTURE_H
 #define STRUCTURE_H
 
+#include <QGraphicsScene>
+
 struct dot3d{
     double x;
     double y;
@@ -42,5 +44,9 @@ struct action{
     scalse_act sc;
     rotate_act rt;
 };
+
+/***********************************/
+
+typedef QGraphicsScene scenet_t;
 
 #endif // STRUCTURE_H

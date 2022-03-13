@@ -12,17 +12,19 @@ SOURCES += \
     control.cpp \
     frame_funcs.cpp \
     frame_tranform.cpp \
-    ioput.cpp \
+    input.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    output.cpp
 
 HEADERS += \
     constants.h \
     control.h \
     frame_funcs.h \
     frame_transform.h \
-    ioput.h \
+    input.h \
     mainwindow.h \
+    output.h \
     structure.h
 
 FORMS += \

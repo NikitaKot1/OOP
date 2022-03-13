@@ -20,15 +20,16 @@ public:
 
 private slots:
     void on_fileButton_clicked();
-
     void on_transferButton_clicked();
+    void on_scaleButton_clicked();
+    void on_rotateButton_clicked();
 
-private:
+public:
     void drawFrame(frame3d fr);
     void printMessage(err_type rc);
 
 
-private:
+public:
     Ui::MainWindow *ui;
     QGraphicsScene scene;
 };
