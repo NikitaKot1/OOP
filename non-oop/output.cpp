@@ -7,30 +7,41 @@
 #include "cmath"
 #include <QMessageBox>
 
-void drawFr(frame3d fr, scenet_t *sc)
+err_type drawFr(scenet_t &sc, frame3d fr)
 {
-    sc->clear();
-    for (int i = 0; i < fr.leng; i++)
+    sc.clear();
+    err_type rc = OK;
+    for (int i = 0; i < frames_length_sects(fr); i++)
     {
-        bool ok = true;
-        ok = frames_i_x(fr, i, true) != nullptr && frames_i_y(fr, i, true) != nullptr && frames_i_z(fr, i, true) != nullptr;
-        ok = ok && frames_i_x(fr, i, false) != nullptr && frames_i_y(fr, i, false) != nullptr && frames_i_z(fr, i, false) != nullptr;
         double x1, x2, y2, y1, z1, z2;
-        if (ok)
+        int i1, i2;
+        rc = get_i_sect(i1, i2, i, fr);
+        if (rc == OK)
+            rc = get_dot_i_x(x1, i1, fr);
+        if (rc == OK)
+            rc = get_dot_i_x(x2, i2, fr);
+
+        if (rc == OK)
+            rc = get_dot_i_y(y1, i1, fr);
+        if (rc == OK)
+            rc = get_dot_i_y(y2, i2, fr);
+
+        if (rc == OK)
+            rc = get_dot_i_z(z1, i1, fr);
+        if (rc == OK)
+            rc = get_dot_i_z(z2, i2, fr);
+
+        if (rc == OK)
         {
-            x1 = *frames_i_x(fr, i, true);
-            x2 = *frames_i_x(fr, i, false);
-            y1 = *frames_i_y(fr, i, true);
-            y2 = *frames_i_y(fr, i, false);
-            z1 = *frames_i_z(fr, i, true);
-            z2 = *frames_i_z(fr, i, false);
             x1 = x1 - z1 * sqrt(0.5);
             y1 = y1 - z1 * sqrt(0.5);
             x2 = x2 - z2 * sqrt(0.5);
             y2 = y2 - z2 * sqrt(0.5);
-            sc->addLine(x1, y1, x2, y2);
+
+            sc.addLine(x1, y1, x2, y2);
         }
     }
+    return rc;
 }
 
 void printMessage(err_type rc)
@@ -53,8 +64,12 @@ void printMessage(err_type rc)
         mess.setText(QString("Попытка получения несуществующего отрезка!"));
         break;
 
-    case NULLPTR_COORD:
+    case UNKNOWN_COORD:
         mess.setText(QString("Попытка использования несуществующей координаты!"));
+        break;
+
+    case UNKNOWN_SECT:
+        mess.setText(QString("Попытка использования несуществующего отрезка!"));
         break;
 
     case NON_SECT_ERR:

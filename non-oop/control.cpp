@@ -4,51 +4,57 @@
 #include "mainwindow.h"
 #include "frame_funcs.h"
 #include "output.h"
+#include "input.h"
 
 #include "cmath"
 
-void control(frame3d& fr, int tag, action act, scenet_t *sc, err_type rc)
+extern std::string fileName;
+frame3d fr;
+
+err_type control(scenet_t &sc, int tag, action act)
 {
+    err_type rc = OK;
+    frame3d fr_cop;
+    rc = copy_frame(fr_cop, fr);
     if (rc != OK)
-    {
-        printMessage(rc);
-        return;
-    }
+        return rc;
     switch (tag) {
     case TRANSFERE:
-        rc = transfer(fr, act.tr);
-        if (!rc)
-            drawFr(fr, sc);
-        else
-            printMessage(rc);
+        rc = transfer(fr_cop, act.tr);
         break;
 
     case SCALE:
-        rc = scale(fr, act.sc);
-        if (!rc)
-            drawFr(fr, sc);
-        else
-            printMessage(rc);
+        rc = scale(fr_cop, act.sc);
         break;
 
     case ROTATE:
-        rc = rotate(fr, act.rt);
-        if (!rc)
-            drawFr(fr, sc);
-        else
-            printMessage(rc);
+        rc = rotate(fr_cop, act.rt);
         break;
 
     case PRINT:
-        if (!rc)
-            drawFr(fr, sc);
+    {
+        FILE* f = fopen(fileName.c_str(), "r");
+        if (!f)
+            rc = FILE_OPEN_ERR;
         else
-            printMessage(rc);
+        {
+            if (frames_length_dots(fr_cop) != 0)
+                free_frame(fr_cop);
+            rc = input_frame(fr_cop, f);
+        }
+
         break;
+    }
 
     default:
         rc = UNKNOWN_TAG;
-        printMessage(rc);
         break;
     }
+    if (rc == OK)
+    {
+        free_frame(fr);
+        fr = fr_cop;
+        drawFr(sc, fr);
+    }
+    return rc;
 }

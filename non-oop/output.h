@@ -4,7 +4,7 @@
 #include "structure.h"
 #include "constants.h"
 
-void drawFr(frame3d fr, scenet_t *sc);
+err_type drawFr(scenet_t &sc, frame3d fr);
 void printMessage(err_type rc);
 
 #endif // OUTPUT_H

@@ -26,7 +26,6 @@ private slots:
 
 public:
     void drawFrame(frame3d fr);
-    void printMessage(err_type rc);
 
 
 public:

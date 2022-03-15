@@ -8,16 +8,9 @@ err_type transfer_i_x(frame3d& fr, int i, double dx)
 {
     err_type rc = OK;
     double x;
-    if (frames_i_x(fr, i, true) != nullptr)
-    {
-        x = *frames_i_x(fr, i, true);
-        rc = set_i_dot_x(fr, i, x + dx, true);
-    }
-    if (!rc && frames_i_x(fr, i, false) != nullptr)
-    {
-        x = *frames_i_x(fr, i, false);
-        rc = set_i_dot_x(fr, i, x + dx, false);
-    }
+    rc = get_dot_i_x(x, i, fr);
+    if (rc == OK)
+        rc = set_i_dot_x(fr, i, x + dx);
     return rc;
 }
 
@@ -25,16 +18,9 @@ err_type transfer_i_y(frame3d& fr, int i, double dy)
 {
     err_type rc = OK;
     double y;
-    if (frames_i_y(fr, i, true) != nullptr)
-    {
-        y = *frames_i_y(fr, i, true);
-        rc = set_i_dot_y(fr, i, y + dy, true);
-    }
-    if (!rc && frames_i_y(fr, i, false) != nullptr)
-    {
-        y = *frames_i_y(fr, i, false);
-        rc = set_i_dot_y(fr, i, y + dy, false);
-    }
+    rc = get_dot_i_y(y, i, fr);
+    if (rc == OK)
+        rc = set_i_dot_y(fr, i, y + dy);
     return rc;
 }
 
@@ -42,28 +28,21 @@ err_type transfer_i_z(frame3d& fr, int i, double dz)
 {
     err_type rc = OK;
     double z;
-    if (frames_i_z(fr, i, true) != nullptr)
-    {
-        z = *frames_i_z(fr, i, true);
-        rc = set_i_dot_z(fr, i, z + dz, true);
-    }
-    if (!rc && frames_i_z(fr, i, false) != nullptr)
-    {
-        z = *frames_i_z(fr, i, false);
-        rc = set_i_dot_z(fr, i, z + dz, false);
-    }
+    rc = get_dot_i_z(z, i, fr);
+    if (rc == OK)
+        rc = set_i_dot_z(fr, i, z + dz);
     return rc;
 }
 
 err_type transfer(frame3d& fr, transf_act tr)
 {
     err_type rc = OK;
-    for (int i = 0; i < fr.leng && !rc; i++)
+    for (int i = 0; rc == OK && i < frames_length_dots(fr); i++)
     {
         rc = transfer_i_x(fr, i, tr.dx);
-        if (!rc)
+        if (rc == OK)
             rc = transfer_i_y(fr, i, tr.dy);
-        if (!rc)
+        if (rc == OK)
             rc = transfer_i_z(fr, i, tr.dz);
     }
     return rc;
@@ -73,16 +52,9 @@ err_type scale_i_x(frame3d& fr, int i, double kx)
 {
     err_type rc = OK;
     double x;
-    if (frames_i_x(fr, i, true) != nullptr)
-    {
-        x = *frames_i_x(fr, i, true);
-        rc = set_i_dot_x(fr, i, x * kx, true);
-    }
-    if (!rc && frames_i_x(fr, i, false) != nullptr)
-    {
-        x = *frames_i_x(fr, i, false);
-        rc = set_i_dot_x(fr, i, x * kx, false);
-    }
+    rc = get_dot_i_x(x, i, fr);
+    if (rc == OK)
+        rc = set_i_dot_x(fr, i, x * kx);
     return rc;
 }
 
@@ -90,16 +62,9 @@ err_type scale_i_y(frame3d& fr, int i, double ky)
 {
     err_type rc = OK;
     double y;
-    if (frames_i_y(fr, i, true) != nullptr)
-    {
-        y = *frames_i_y(fr, i, true);
-        rc = set_i_dot_y(fr, i, y * ky, true);
-    }
-    if (!rc && frames_i_y(fr, i, false) != nullptr)
-    {
-        y = *frames_i_y(fr, i, false);
-        rc = set_i_dot_y(fr, i, y * ky, false);
-    }
+    rc = get_dot_i_y(y, i, fr);
+    if (rc == OK)
+        rc = set_i_dot_y(fr, i, y * ky);
     return rc;
 }
 
@@ -107,23 +72,16 @@ err_type scale_i_z(frame3d& fr, int i, double kz)
 {
     err_type rc = OK;
     double z;
-    if (frames_i_z(fr, i, true) != nullptr)
-    {
-        z = *frames_i_z(fr, i, true);
-        rc = set_i_dot_z(fr, i, z * kz, true);
-    }
-    if (!rc && frames_i_z(fr, i, false) != nullptr)
-    {
-        z = *frames_i_z(fr, i, false);
-        rc = set_i_dot_z(fr, i, z * kz, false);
-    }
+    rc = get_dot_i_z(z, i, fr);
+    if (rc == OK)
+        rc = set_i_dot_z(fr, i, z * kz);
     return rc;
 }
 
 err_type scale(frame3d& fr, scalse_act sc)
 {
     err_type rc = OK;
-    for (int i = 0; i < fr.leng && !rc; i++)
+    for (int i = 0; !rc && i < frames_length_dots(fr); i++)
     {
         rc = scale_i_x(fr, i, sc.kx);
         if (!rc)
@@ -147,28 +105,16 @@ err_type rotate_i_xy(frame3d& fr, int i, double ang)
 {
     err_type rc = OK;
     double x, y;
-    if (frames_i_x(fr, i, true) != nullptr && frames_i_y(fr, i, true) != nullptr)
+    rc = get_dot_i_x(x, i, fr);
+    if (rc == OK)
+        rc = get_dot_i_y(y, i, fr);
+    if (rc == OK)
     {
-        x = *frames_i_x(fr, i, true);
-        y = *frames_i_y(fr, i, true);
         rotate_0xy(x, y, ang);
-        rc = set_i_dot_x(fr, i, x, true);
-        if (!rc)
-            rc = set_i_dot_y(fr, i, y, true);
+        rc = set_i_dot_x(fr, i, x);
+        if (rc == OK)
+            rc = set_i_dot_y(fr, i, y);
     }
-    else
-        rc = NULLPTR_COORD;
-    if (!rc && frames_i_x(fr, i, false) != nullptr && frames_i_y(fr, i, true) != nullptr)
-    {
-        x = *frames_i_x(fr, i, false);
-        y = *frames_i_y(fr, i, false);
-        rotate_0xy(x, y, ang);
-        rc = set_i_dot_x(fr, i, x, false);
-        if (!rc)
-            rc = set_i_dot_y(fr, i, y, false);
-    }
-    else if (!rc)
-        rc = NULLPTR_COORD;
     return rc;
 }
 
@@ -185,28 +131,16 @@ err_type rotate_i_yz(frame3d& fr, int i, double ang)
 {
     err_type rc = OK;
     double z, y;
-    if (frames_i_z(fr, i, true) != nullptr && frames_i_y(fr, i, true) != nullptr)
+    rc = get_dot_i_z(z, i, fr);
+    if (rc == OK)
+        rc = get_dot_i_y(y, i, fr);
+    if (rc == OK)
     {
-        z = *frames_i_z(fr, i, true);
-        y = *frames_i_y(fr, i, true);
         rotate_0yz(y, z, ang);
-        rc = set_i_dot_z(fr, i, z, true);
-        if (!rc)
-            rc = set_i_dot_y(fr, i, y, true);
+        rc = set_i_dot_z(fr, i, z);
+        if (rc == OK)
+            rc = set_i_dot_y(fr, i, y);
     }
-    else
-        rc = NULLPTR_COORD;
-    if (!rc && frames_i_y(fr, i, false) != nullptr && frames_i_z(fr, i, false) != nullptr)
-    {
-        z = *frames_i_z(fr, i, false);
-        y = *frames_i_y(fr, i, false);
-        rotate_0yz(y, z, ang);
-        rc = set_i_dot_z(fr, i, z, false);
-        if (!rc)
-            rc = set_i_dot_y(fr, i, y, false);
-    }
-    else if (!rc)
-        rc = NULLPTR_COORD;
     return rc;
 }
 
@@ -223,28 +157,16 @@ err_type rotate_i_xz(frame3d& fr, int i, double ang)
 {
     err_type rc = OK;
     double x, z;
-    if (frames_i_x(fr, i, true) != nullptr && frames_i_z(fr, i, true) != nullptr)
+    rc = get_dot_i_x(x, i, fr);
+    if (rc == OK)
+        rc = get_dot_i_z(z, i, fr);
+    if (rc == OK)
     {
-        x = *frames_i_x(fr, i, true);
-        z = *frames_i_z(fr, i, true);
         rotate_0xz(x, z, ang);
-        rc = set_i_dot_z(fr, i, z, true);
-        if (!rc)
-            rc = set_i_dot_x(fr, i, x, true);
+        rc = set_i_dot_x(fr, i, x);
+        if (rc == OK)
+            rc = set_i_dot_z(fr, i, z);
     }
-    else
-        rc = NULLPTR_COORD;
-    if (!rc && frames_i_x(fr, i, false) != nullptr && frames_i_z(fr, i, false) != nullptr)
-    {
-        z = *frames_i_z(fr, i, false);
-        x = *frames_i_x(fr, i, false);
-        rotate_0xz(x, z, ang);
-        rc = set_i_dot_z(fr, i, z, false);
-        if (!rc)
-            rc = set_i_dot_x(fr, i, x, false);
-    }
-    else if (!rc)
-        rc = NULLPTR_COORD;
     return rc;
 }
 
@@ -252,7 +174,7 @@ err_type rotate_i_xz(frame3d& fr, int i, double ang)
 err_type rotate(frame3d& fr, rotate_act rt)
 {
     err_type rc = OK;
-    for (int i = 0; i < fr.leng && !rc; i++)
+    for (int i = 0; !rc && i < frames_length_dots(fr); i++)
     {
         rc = rotate_i_xy(fr, i, rt.ang_xy);
         if (!rc)

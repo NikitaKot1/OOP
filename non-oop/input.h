@@ -5,10 +5,9 @@
 #include "constants.h"
 #include <cstdio>
 
-err_type input_frame(FILE* f, frame3d& fr);
-err_type input_sect(section3d& sect, FILE* f);
-err_type input_dot(dot3d* dot1, FILE* f);
 void free_frame(frame3d& fr);
-int col_of_sections(FILE* f);
+err_type init_frame(frame3d& fr, int ndots, int nsect);
+err_type copy_frame(frame3d &fr_cop, const frame3d fr);
+err_type input_frame(frame3d& fr, FILE* f);
 
 #endif // INPUT_H

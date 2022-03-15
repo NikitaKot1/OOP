@@ -9,14 +9,16 @@ struct dot3d{
     double z;
 };
 
-struct section3d{
-    dot3d *start;
-    dot3d *end;
+struct section{
+    int start;
+    int end;
 };
 
 struct frame3d{
-    int leng;
-    section3d *mass;
+    int ndots;
+    dot3d *dots;
+    int nsect;
+    section *sects;
 };
 
 /*********************************/

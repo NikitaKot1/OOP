@@ -3,68 +3,108 @@
 #include "constants.h"
 
 
-int col_of_sections(FILE* f)
+int col_of_dots(FILE* f)
 {
-    int rc = 6;
-    double x1, x2, x3, y1, y2, y3;
+    int rc = 3;
+    double x, y, z;
     int col = 0;
-    while (rc == 6)
+    char buff[1024];
+    while (rc == 3)
     {
-        rc = fscanf(f, "%lf %lf %lf %lf %lf %lf", &x1, &x2, &x3, &y1, &y2, &y3);
-        if (rc == 6)
+        fgets(buff, sizeof (buff), f);
+        rc = sscanf(buff, "%lf %lf %lf", &x, &y, &z);
+        if (rc == 3)
             col++;
     }
     return col;
 }
 
-void free_frame(frame3d& fr)
+err_type col_of_sects(int& rez, int maxr, FILE* f)
 {
-    for (int i = 0; i < fr.leng; i++)
+    err_type rc = OK;
+    int drc = 2;
+    int d1, d2;
+    int col = 0;
+    char buff[1024];
+    while (drc == 2 && rc == OK && !feof(f))
     {
-        delete fr.mass[i].start;
-        delete fr.mass[i].end;
+        fgets(buff, sizeof (buff), f);
+        drc = sscanf(buff, "%d %d", &d1, &d2);
+        if (d1 >= maxr || d1 < 0 || d2 >= maxr || d2 < 0)
+            rc = NON_SECT_ERR;
+        if (drc == 2)
+            col++;
     }
-    delete fr.mass;
-}
-
-err_type input_dot(dot3d* dot1, FILE* f)
-{
-    err_type rc = fscanf(f, "%lf %lf %lf", &(dot1->x), &(dot1->y), &(dot1->z));
-    return rc == 3 ? 0 : INPUT_ERR;
-}
-
-err_type input_sect(section3d& sect, FILE* f)
-{
-    err_type rc = 0;
-    rc = input_dot(sect.start, f);
-    if (!rc)
-        rc = input_dot(sect.end, f);
+    rez = col;
     return rc;
 }
 
-err_type input_frame(FILE* f, frame3d& fr)
+void free_frame(frame3d& fr)
+{
+    delete fr.dots;
+    delete fr.sects;
+    fr.ndots = 0;
+    fr.nsect = 0;
+}
+
+err_type init_frame(frame3d& fr, int ndots, int nsect)
+{
+    err_type rc = OK;
+    fr.ndots = ndots;
+    fr.nsect = nsect;
+    fr.dots = new dot3d[ndots];
+    fr.sects = new section[nsect];
+    if (!fr.dots || !fr.sects)
+        rc = MEMORY_ERR;
+    return rc;
+}
+
+err_type copy_frame(frame3d &fr_cop, const frame3d fr)
+{
+    err_type rc = init_frame(fr_cop, fr.ndots, fr.nsect);
+    if (rc == OK)
+    {
+        for (int i = 0; i < fr.ndots; i++)
+            fr_cop.dots[i] = fr.dots[i];
+        for (int i = 0; i < fr.nsect; i++)
+            fr_cop.sects[i] = fr.sects[i];
+    }
+
+    return rc;
+}
+
+err_type input_dot(dot3d& dot1, FILE* f)
+{
+    int rc = fscanf(f, "%lf %lf %lf", &(dot1.x), &(dot1.y), &(dot1.z));
+    return rc == 3 ? OK : INPUT_ERR;
+}
+
+err_type input_sect(section& sect, FILE* f)
+{
+    int rc = fscanf(f, "%d %d", &(sect.start), &(sect.end));
+    return rc == 2 ? OK : NON_SECT_ERR;
+}
+
+err_type input_frame(frame3d& fr, FILE* f)
 {
     err_type rc = OK;
     if (!f)
         rc = FILE_OPEN_ERR;
-    if (!rc)
+    if (rc == OK)
     {
-        int col = col_of_sections(f);
+        int ndots = col_of_dots(f), nsects = 0;
+        rc = col_of_sects(nsects, ndots, f);
         rewind(f);
-        if (col != 0)
+        if (rc == OK)
         {
-            fr.leng = col;
-            fr.mass = new section3d[col];
-            for (int i = 0; i < col; i++)
+            rc = init_frame(fr, ndots, nsects);
+            if (rc == OK)
             {
-                fr.mass[i].start = new dot3d;
-                fr.mass[i].end = new dot3d;
-            }
-            if (fr.mass)
-            {
-                for (int i = 0; i < col && !rc; i++)
-                    rc = input_sect(fr.mass[i], f);
-                if (rc)
+                for (int i = 0; rc == OK && i < ndots; i++)
+                    rc = input_dot(fr.dots[i], f);
+                for (int i = 0; rc == OK && i < nsects; i++)
+                    rc = input_sect(fr.sects[i], f);
+                if (rc != OK)
                     free_frame(fr);
             }
             else

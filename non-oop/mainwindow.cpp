@@ -6,8 +6,8 @@
 #include "frame_funcs.h"
 #include "output.h"
 
-frame3d fr;
 action act;
+std::string fileName;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -24,10 +24,10 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_fileButton_clicked()
 {
-    std::string str = ui->fileEdit->text().toStdString();
-    FILE* f = fopen(str.c_str(), "r");
-    err_type rc = input_frame(f, fr);
-    control(fr, PRINT, act, ui->graphicsView->scene(), rc);
+    fileName = ui->fileEdit->text().toStdString();
+    err_type rc = control(scene, PRINT, act);
+    if (rc)
+        printMessage(rc);
 }
 
 void MainWindow::on_transferButton_clicked()
@@ -39,7 +39,10 @@ void MainWindow::on_transferButton_clicked()
     if (ok)
         act.tr.dz = ui->editDZ->text().toFloat(&ok);
     err_type rc = ok ? OK : INP_ACT_ERR;
-    control(fr, TRANSFERE, act, ui->graphicsView->scene(), rc);
+    if (!rc)
+        rc = control(scene, TRANSFERE, act);
+    if (rc)
+        printMessage(rc);
 }
 
 
@@ -52,7 +55,10 @@ void MainWindow::on_scaleButton_clicked()
     if (ok)
         act.sc.kz = ui->editKZ->text().toFloat(&ok);
     err_type rc = ok ? OK : INP_ACT_ERR;
-    control(fr, SCALE, act, ui->graphicsView->scene(), rc);
+    if (!rc)
+        rc = control(scene, SCALE, act);
+    if (rc)
+        printMessage(rc);
 }
 
 
@@ -65,6 +71,9 @@ void MainWindow::on_rotateButton_clicked()
     if (ok)
         act.rt.ang_yz = ui->editAngYZ->text().toFloat(&ok);
     err_type rc = ok ? OK : INP_ACT_ERR;
-    control(fr, ROTATE, act, ui->graphicsView->scene(), rc);
+    if (!rc)
+        rc = control(scene, ROTATE, act);
+    if (rc)
+        printMessage(rc);
 }
 

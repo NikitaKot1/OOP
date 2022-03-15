@@ -4,6 +4,6 @@
 #include "structure.h"
 #include "constants.h"
 
-void control(frame3d& fr, int tag, action act, scenet_t *sc, err_type rc);
+err_type control(scenet_t &sc, int tag, action act);
 
 #endif // CONTROL_H

@@ -8,9 +8,10 @@ typedef int err_type;
 #define INPUT_ERR 3
 #define NON_SECT_ERR 4
 #define FRAME_I_ERR 5
-#define NULLPTR_COORD 6
+#define UNKNOWN_COORD 6
 #define UNKNOWN_TAG 7
 #define INP_ACT_ERR 8
+#define UNKNOWN_SECT 9
 /**************************/
 #define TRANSFERE 1
 #define SCALE 2
