@@ -10,14 +10,14 @@ struct dot3d{
 };
 
 struct section{
-    int start;
-    int end;
+    size_t start;
+    size_t end;
 };
 
 struct frame3d{
-    int ndots;
+    size_t ndots;
     dot3d *dots;
-    int nsect;
+    size_t nsect;
     section *sects;
 };
 
@@ -41,10 +41,15 @@ struct rotate_act{
     double nag_xz;
 };
 
+struct input_act{
+    const char *filename;
+};
+
 struct action{
     transf_act tr;
     scalse_act sc;
     rotate_act rt;
+    input_act inp;
 };
 
 /***********************************/

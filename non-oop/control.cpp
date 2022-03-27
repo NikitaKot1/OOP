@@ -8,53 +8,37 @@
 
 #include "cmath"
 
-extern std::string fileName;
-frame3d fr;
-
 err_type control(scenet_t &sc, int tag, action act)
 {
     err_type rc = OK;
-    frame3d fr_cop;
-    rc = copy_frame(fr_cop, fr);
+    static frame3d fr = init_frame();
     if (rc != OK)
         return rc;
     switch (tag) {
     case TRANSFERE:
-        rc = transfer(fr_cop, act.tr);
+        rc = transfer(fr, act.tr);
         break;
 
     case SCALE:
-        rc = scale(fr_cop, act.sc);
+        rc = scale(fr, act.sc);
         break;
 
     case ROTATE:
-        rc = rotate(fr_cop, act.rt);
+        rc = rotate(fr, act.rt);
+        break;
+
+    case INPUT:
+        rc = download_frame(fr, act.inp);
         break;
 
     case PRINT:
-    {
-        FILE* f = fopen(fileName.c_str(), "r");
-        if (!f)
-            rc = FILE_OPEN_ERR;
-        else
-        {
-            if (frames_length_dots(fr_cop) != 0)
-                free_frame(fr_cop);
-            rc = input_frame(fr_cop, f);
-        }
-
+        drawFr(sc, fr);
         break;
-    }
 
     default:
         rc = UNKNOWN_TAG;
         break;
     }
-    if (rc == OK)
-    {
-        free_frame(fr);
-        fr = fr_cop;
-        drawFr(sc, fr);
-    }
+
     return rc;
 }

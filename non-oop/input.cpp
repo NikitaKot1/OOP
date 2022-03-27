@@ -1,7 +1,8 @@
 #include <cstdio>
 #include "structure.h"
 #include "constants.h"
-
+#include "dot_funcs.h"
+#include "frame_funcs.h"
 
 int col_of_dots(FILE* f)
 {
@@ -47,7 +48,7 @@ void free_frame(frame3d& fr)
     fr.nsect = 0;
 }
 
-err_type init_frame(frame3d& fr, int ndots, int nsect)
+err_type create_frame(frame3d& fr, int ndots, int nsect)
 {
     err_type rc = OK;
     fr.ndots = ndots;
@@ -59,15 +60,25 @@ err_type init_frame(frame3d& fr, int ndots, int nsect)
     return rc;
 }
 
+frame3d init_frame()
+{
+    frame3d fr;
+    fr.ndots = 0;
+    fr.nsect = 0;
+    fr.dots = nullptr;
+    fr.sects = nullptr;
+    return fr;
+}
+
 err_type copy_frame(frame3d &fr_cop, const frame3d fr)
 {
-    err_type rc = init_frame(fr_cop, fr.ndots, fr.nsect);
+    err_type rc = create_frame(fr_cop, fr.ndots, fr.nsect);
     if (rc == OK)
     {
-        for (int i = 0; i < fr.ndots; i++)
-            fr_cop.dots[i] = fr.dots[i];
-        for (int i = 0; i < fr.nsect; i++)
-            fr_cop.sects[i] = fr.sects[i];
+        for (size_t i = 0; i < frames_length_dots(fr); i++)
+            copy_dot(get_dot(fr_cop, i), get_dot(fr, i));
+        for (size_t i = 0; i < frames_length_sects(fr); i++)
+            copy_sect(get_sect(fr_cop, i), get_sect(fr, i));
     }
 
     return rc;
@@ -81,37 +92,85 @@ err_type input_dot(dot3d& dot1, FILE* f)
 
 err_type input_sect(section& sect, FILE* f)
 {
-    int rc = fscanf(f, "%d %d", &(sect.start), &(sect.end));
+    int rc = fscanf(f, "%llu %llu", &(sect.start), &(sect.end));
     return rc == 2 ? OK : NON_SECT_ERR;
 }
 
+
+err_type input_dots(dot3d *dots, size_t n, FILE* f)
+{
+    if (!n || !dots || !f)
+        return INPUT_ERR;
+    dot3d d;
+    err_type rc = OK;
+    for (size_t i = 0; !rc && i < n; i++)
+    {
+        rc = input_dot(d, f);
+        if (rc == OK)
+            copy_dot(dots[i], d);
+    }
+    return rc;
+}
+
+err_type input_sects(section *sects, size_t n, FILE* f)
+{
+    if (!n || !sects || !f)
+        return INPUT_ERR;
+    section sc;
+    err_type rc = OK;
+    for (size_t i = 0; !rc && i < n; i++)
+    {
+        rc = input_sect(sc, f);
+        if (rc == OK)
+            copy_sect(sects[i], sc);
+    }
+    return rc;
+}
+
+
+
 err_type input_frame(frame3d& fr, FILE* f)
 {
+    rewind(f);
+    size_t n = frames_length_dots(fr);
     err_type rc = OK;
-    if (!f)
-        rc = FILE_OPEN_ERR;
+    rc = input_dots(fr.dots, n, f);
     if (rc == OK)
     {
-        int ndots = col_of_dots(f), nsects = 0;
-        rc = col_of_sects(nsects, ndots, f);
-        rewind(f);
+        n = frames_length_sects(fr);
+        rc = input_sects(fr.sects, n, f);
+    }
+    return rc;
+}
+
+err_type read_frame(frame3d& fr, FILE* f)
+{
+    if (!f)
+        return FILE_OPEN_ERR;
+    err_type rc = OK;
+    frame3d fr_cop = init_frame();
+    int ndots = col_of_dots(f), nsects = 0;
+    rc = col_of_sects(nsects, ndots, f);
+    if (rc == OK)
+    {
+        rc = create_frame(fr_cop, ndots, nsects);
         if (rc == OK)
         {
-            rc = init_frame(fr, ndots, nsects);
+            rc = input_frame(fr_cop, f);
             if (rc == OK)
             {
-                for (int i = 0; rc == OK && i < ndots; i++)
-                    rc = input_dot(fr.dots[i], f);
-                for (int i = 0; rc == OK && i < nsects; i++)
-                    rc = input_sect(fr.sects[i], f);
-                if (rc != OK)
-                    free_frame(fr);
+                free_frame(fr);
+                copy_frame(fr, fr_cop);
             }
-            else
-                rc = MEMORY_ERR;
         }
-        else
-            rc = NON_SECT_ERR;
     }
+    return rc;
+}
+
+err_type download_frame(frame3d& fr, input_act act)
+{
+    FILE *f = fopen(act.filename, "r");
+    err_type rc = read_frame(fr, f);
+    fclose(f);
     return rc;
 }

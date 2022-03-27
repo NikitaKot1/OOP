@@ -12,10 +12,12 @@ typedef int err_type;
 #define UNKNOWN_TAG 7
 #define INP_ACT_ERR 8
 #define UNKNOWN_SECT 9
+#define EMPTY_DOT 10
 /**************************/
 #define TRANSFERE 1
 #define SCALE 2
 #define ROTATE 3
 #define PRINT 4
+#define INPUT 5
 
 #endif // CONSTANTS_H

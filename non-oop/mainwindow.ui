@@ -228,6 +228,19 @@
      <string>Задать путь к файлу</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="printButton">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>700</y>
+      <width>211</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Отрисовать</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

@@ -24,6 +24,8 @@ private slots:
     void on_scaleButton_clicked();
     void on_rotateButton_clicked();
 
+    void on_printButton_clicked();
+
 public:
     void drawFrame(frame3d fr);
 

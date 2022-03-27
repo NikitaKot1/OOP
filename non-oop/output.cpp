@@ -3,43 +3,28 @@
 #include "frame_transform.h"
 #include "mainwindow.h"
 #include "frame_funcs.h"
-
+#include "dot_funcs.h"
+#include "output.h"
 #include "cmath"
 #include <QMessageBox>
+
+void drawLine(scenet_t &sc, dot3d d1, dot3d d2)
+{
+    double z1 = sqrt(0.5) * get_dots_z(d1);
+    double z2 = sqrt(0.5) * get_dots_z(d2);
+    sc.addLine(get_dots_x(d1) - z1, get_dots_y(d1) - z1,
+               get_dots_x(d2) - z2, get_dots_y(d2) - z2);
+}
 
 err_type drawFr(scenet_t &sc, frame3d fr)
 {
     sc.clear();
     err_type rc = OK;
-    for (int i = 0; i < frames_length_sects(fr); i++)
+    for (size_t i = 0; i < frames_length_sects(fr); i++)
     {
-        double x1, x2, y2, y1, z1, z2;
-        int i1, i2;
-        rc = get_i_sect(i1, i2, i, fr);
-        if (rc == OK)
-            rc = get_dot_i_x(x1, i1, fr);
-        if (rc == OK)
-            rc = get_dot_i_x(x2, i2, fr);
-
-        if (rc == OK)
-            rc = get_dot_i_y(y1, i1, fr);
-        if (rc == OK)
-            rc = get_dot_i_y(y2, i2, fr);
-
-        if (rc == OK)
-            rc = get_dot_i_z(z1, i1, fr);
-        if (rc == OK)
-            rc = get_dot_i_z(z2, i2, fr);
-
-        if (rc == OK)
-        {
-            x1 = x1 - z1 * sqrt(0.5);
-            y1 = y1 - z1 * sqrt(0.5);
-            x2 = x2 - z2 * sqrt(0.5);
-            y2 = y2 - z2 * sqrt(0.5);
-
-            sc.addLine(x1, y1, x2, y2);
-        }
+        size_t ist = get_start_sect(get_sect(fr, i));
+        size_t ien = get_end_sect(get_sect(fr, i));
+        drawLine(sc, get_dot(fr, ist), get_dot(fr, ien));
     }
     return rc;
 }

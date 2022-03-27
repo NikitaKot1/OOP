@@ -10,6 +10,7 @@ CONFIG += c++11
 
 SOURCES += \
     control.cpp \
+    dot_funcs.cpp \
     frame_funcs.cpp \
     frame_tranform.cpp \
     input.cpp \
@@ -20,6 +21,7 @@ SOURCES += \
 HEADERS += \
     constants.h \
     control.h \
+    dot_funcs.h \
     frame_funcs.h \
     frame_transform.h \
     input.h \

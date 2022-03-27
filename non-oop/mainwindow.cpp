@@ -7,7 +7,6 @@
 #include "output.h"
 
 action act;
-std::string fileName;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -24,10 +23,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_fileButton_clicked()
 {
-    fileName = ui->fileEdit->text().toStdString();
-    err_type rc = control(scene, PRINT, act);
+    std::string fileName = ui->fileEdit->text().toStdString();
+    act.inp.filename = fileName.c_str();
+    err_type rc = control(scene, INPUT, act);
     if (rc)
         printMessage(rc);
+    control(scene, PRINT, act);
 }
 
 void MainWindow::on_transferButton_clicked()
@@ -73,6 +74,14 @@ void MainWindow::on_rotateButton_clicked()
     err_type rc = ok ? OK : INP_ACT_ERR;
     if (!rc)
         rc = control(scene, ROTATE, act);
+    if (rc)
+        printMessage(rc);
+}
+
+
+void MainWindow::on_printButton_clicked()
+{
+    err_type rc = control(scene, PRINT, act);
     if (rc)
         printMessage(rc);
 }
