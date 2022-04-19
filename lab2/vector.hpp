@@ -77,9 +77,9 @@ class Vector: public VectorRoot
         Vector<Type> &scalMulVec(const Vector<Type> &vector);
 
         //косое произведение
-        Vector<Type> &operator:=(const Vector<Type> &vector);
+        Vector<Type> &operator^=(const Vector<Type> &vector);
         void skewMulEq(const Vector<Type> &vector);
-        Vector<Type> &operator:(const Vector<Type> &vector);
+        Vector<Type> &operator^(const Vector<Type> &vector);
         Vector<Type> &skewMulVec(const Vector<Type> &vector);
 
         //деление вектора на вектор (поэлементно) и на число

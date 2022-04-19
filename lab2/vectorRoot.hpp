@@ -6,12 +6,12 @@
 class VectorRoot
 {
     protected:
-        size_t size = 0;
+        size_t sizeV = 0;
 
     public:
-        VectorRoot(size_t size = 0): size(size) {}
-        virtual size_t size() const {return size;};
-        virtual operator bool() const {return bool(size);};
+        VectorRoot(size_t sizeV = 0): sizeV(sizeV) {}
+        virtual size_t size() const {return sizeV;};
+        virtual operator bool() const {return bool(sizeV);};
         virtual ~VectorRoot() = 0;
     
 };

@@ -4,7 +4,9 @@
 #include <memory>
 
 #include "exceptions.hpp"
+#include "vector.hpp"
 
+template <typename Type>
 class Vector;
 
 template <typename Type>

@@ -48,7 +48,7 @@ Iterator<Type>::Iterator(const Vector<Type> &vector)
 }
 
 template <typename Type>
-Iterator<Type>::operator*()
+Type &Iterator<Type>::operator*()
 {
     exceptionCheck(__LINE__);
     belongingCheck(__LINE__);
@@ -56,7 +56,7 @@ Iterator<Type>::operator*()
 }
 
 template <typename Type>
-Iterator<Type>::operator->()
+Type *Iterator<Type>::operator->()
 {
     exceptionCheck(__LINE__);
     belongingCheck(__LINE__);
@@ -71,14 +71,14 @@ Iterator<Type>::operator bool() const
 }
 
 template <typename Type>
-Iterator<Type>::operator=(const Iterator<Type> &iter)
+Iterator<Type> &Iterator<Type>::operator=(const Iterator<Type> &iter)
 {
     this->wptr = iter->wptr;
     return *this;
 }
 
 template <typename Type>
-Iterator<Type>::operator+=(size_t number)
+Iterator<Type> &Iterator<Type>::operator+=(size_t number)
 {
     exceptionCheck(__LINE__);
     this->curIndex += number;
@@ -86,7 +86,7 @@ Iterator<Type>::operator+=(size_t number)
 }
 
 template <typename Type>
-Iterator<Type>::operator+(size_t number)
+Iterator<Type> Iterator<Type>::operator+(size_t number)
 {
     exceptionCheck(__LINE__);
     (*this) += number;
@@ -94,7 +94,7 @@ Iterator<Type>::operator+(size_t number)
 }
 
 template <typename Type>
-Iterator<Type>::operator++()
+Iterator<Type> &Iterator<Type>::operator++()
 {
     exceptionCheck(__LINE__);
     (this->curIndex)++;
@@ -102,7 +102,7 @@ Iterator<Type>::operator++()
 }
 
 template <typename Type>
-Iterator<Type>::operator++(int)
+Iterator<Type> Iterator<Type>::operator++(int)
 {
     exceptionCheck(__LINE__);
     (this->curIndex)++;
@@ -110,7 +110,7 @@ Iterator<Type>::operator++(int)
 }
 
 template <typename Type>
-Iterator<Type>::operator-=(size_t number)
+Iterator<Type> &Iterator<Type>::operator-=(size_t number)
 {
     exceptionCheck(__LINE__);
     this->curIndex -= number;
@@ -118,7 +118,7 @@ Iterator<Type>::operator-=(size_t number)
 }
 
 template <typename Type>
-Iterator<Type>::operator-(size_t number)
+Iterator<Type> Iterator<Type>::operator-(size_t number)
 {
     exceptionCheck(__LINE__);
     (*this) -= number;
@@ -126,7 +126,7 @@ Iterator<Type>::operator-(size_t number)
 }
 
 template <typename Type>
-Iterator<Type>::operator--()
+Iterator<Type> &Iterator<Type>::operator--()
 {
     exceptionCheck(__LINE__);
     (this->curIndex)--;
@@ -134,7 +134,7 @@ Iterator<Type>::operator--()
 }
 
 template <typename Type>
-Iterator<Type>::operator--(int)
+Iterator<Type> Iterator<Type>::operator--(int)
 {
     exceptionCheck(__LINE__);
     (this->curIndex)--;

@@ -20,8 +20,8 @@ void Vector<Type>::allocMemForVector(size_t size)
 template <typename Type>
 Vector<Type>::Vector()
 {
-    this->size = 0;
-    this->allocMemForVector(size);
+    this->sizeV = 0;
+    this->allocMemForVector(sizeV);
 }
 
 
