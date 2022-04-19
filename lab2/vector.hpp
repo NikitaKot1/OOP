@@ -8,9 +8,6 @@
 template<typename Type>
 class Vector: public VectorRoot
 {
-    private:
-        std::shared_ptr<Type[]> projections;
-    
     public:
         Vector();
         Vector(const std::initializer_list<Type> &listForm);
@@ -34,6 +31,8 @@ class Vector: public VectorRoot
 
         Type &at(size_t pos);
         Type &operator[](size_t pos);
+        const Type &at(size_t pos) const;
+        const Type &operator[](size_t pos) const;
 
         Vector<Type> &operator=(const Vector<Type> &vector);
         Vector<Type> &operator=(const std::initializer_list<Type> &listForm);
@@ -103,6 +102,10 @@ class Vector: public VectorRoot
 
     protected:
         void allocMemForVector(size_t size);
+
+    private:
+        std::shared_ptr<Type[]> projections;
+    
 };
 
 #endif

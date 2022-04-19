@@ -20,6 +20,8 @@ class Iterator: public std::iterator<std::random_access_iterator_tag, int>
 
         Type &operator*();
         Type *operator->();
+        const Type &operator*() const;
+        const Type *operator->() const;
         operator bool() const;
 
         Iterator<Type> &operator=(const Iterator<Type> &iterator);
