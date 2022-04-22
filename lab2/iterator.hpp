@@ -1,22 +1,22 @@
-#ifndef ITERATOR_HPP
-#define ITERATOR_HPP
+#ifndef ITERATOR_H
+#define ITERATOR_H
 
 #include <memory>
 
 #include "exceptions.hpp"
-#include "vector.hpp"
+//#include "vector.hpp"
 
 template <typename Type>
 class Vector;
 
 template <typename Type>
-class Iterator: public std::iterator<std::random_access_iterator_tag, int>
+class IteratorV: public std::iterator<std::random_access_iterator_tag, int>
 {
     public:
-        Iterator(const Iterator<Type> &iterator);
-        Iterator(const Vector<Type> &vector);
+        IteratorV(const IteratorV<Type> &iterator);
+        IteratorV(const Vector<Type> &vector);
 
-        ~Iterator() = default;
+        ~IteratorV() = default;
 
         Type &operator*();
         Type *operator->();
@@ -24,34 +24,36 @@ class Iterator: public std::iterator<std::random_access_iterator_tag, int>
         const Type *operator->() const;
         operator bool() const;
 
-        Iterator<Type> &operator=(const Iterator<Type> &iterator);
+        IteratorV<Type> &operator=(const IteratorV<Type> &iterator);
 
-        Iterator<Type> &operator-=(size_t number);
-        Iterator<Type> operator-(size_t number);
-        Iterator<Type> &operator--();
-        Iterator<Type> operator--(int);
+        IteratorV<Type> &operator-=(size_t number);
+        IteratorV<Type> operator-(size_t number);
+        IteratorV<Type> &operator--();
+        IteratorV<Type> operator--(int);
 
-        Iterator<Type> &operator+=(size_t number);
-        Iterator<Type> operator+(size_t number);
-        Iterator<Type> &operator++();
-        Iterator<Type> operator++(int);
+        IteratorV<Type> &operator+=(size_t number);
+        IteratorV<Type> operator+(size_t number);
+        IteratorV<Type> &operator++();
+        IteratorV<Type> operator++(int);
 
-        bool operator==(const Iterator<Type> &iter) const;
-        bool operator!=(const Iterator<Type> &iter) const;
-        bool operator<=(const Iterator<Type> &iter) const;
-        bool operator>=(const Iterator<Type> &iter) const;
-        bool operator<(const Iterator<Type> &iter) const;
-        bool operator>(const Iterator<Type> &iter) const;
+        bool operator==(const IteratorV<Type> &iter) const;
+        bool operator!=(const IteratorV<Type> &iter) const;
+        bool operator<=(const IteratorV<Type> &iter) const;
+        bool operator>=(const IteratorV<Type> &iter) const;
+        bool operator<(const IteratorV<Type> &iter) const;
+        bool operator>(const IteratorV<Type> &iter) const;
     
     private:
         std::weak_ptr<Type[]> wptr;
     
     protected:
         Type *getPointer() const;
-        void exceptionCheck(int currentLine);
-        void belongingCheck(int currentLine);
+        void exceptionCheck(int currentLine) const;
+        void belongingCheck(int currentLine) const;
         size_t curIndex = 0;
         size_t vectorSize = 0;
 };
+
+
 
 #endif

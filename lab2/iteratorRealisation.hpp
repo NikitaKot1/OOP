@@ -1,38 +1,38 @@
-#ifndef ITERATORREALISATION_HPP
-#define ITERATORREALISATION_HPP
+#ifndef IteratorVREALISATION_H
+#define IteratorVREALISATION_H
 
 #include "iterator.hpp"
 #include "vector.hpp"
 
 template <typename Type>
-void Iterator<Type>::exceptionCheck(int currentLine)
+void IteratorV<Type>::exceptionCheck(int currentLine) const
 {
     if (wptr.expired())
     {
         time_t curTime = time(NULL);
-        throw DeletedObjectException(__FILE__, typeid(*this).name(), currentLine, ctime(&curTime)); 
+        throw DeletedObjectException(__FILE__, typeid(*this).name(), currentLine, ctime(&curTime));
     }
 }
 
 template <typename Type>
-void Iterator<Type>::belongingCheck(int currentLine)
+void IteratorV<Type>::belongingCheck(int currentLine) const
 {
     if (this->curIndex >= this->vectorSize)
     {
         time_t curTime = time(NULL);
-        throw InvalidIteratorException(__FILE__, typeid(*this).name(), currentLine, ctime(&curTime)); 
+        throw InvalidIteratorException(__FILE__, typeid(*this).name(), currentLine, ctime(&curTime));
     }
 }
 
 template <typename Type>
-Type *Iterator<Type>::getPointer() const
+Type *IteratorV<Type>::getPointer() const
 {
-    std::shared_ptr<Type[]> copyptr = this->wptr.lock;
+    std::shared_ptr<Type[]> copyptr = this->wptr.lock();
     return copyptr.get() + curIndex;
 }
 
 template <typename Type>
-Iterator<Type>::Iterator(const Iterator<Type> &iter)
+IteratorV<Type>::IteratorV(const IteratorV<Type> &iter)
 {
     this->wptr = iter.wptr;
     this->curIndex = iter.curIndex;
@@ -40,7 +40,7 @@ Iterator<Type>::Iterator(const Iterator<Type> &iter)
 }
 
 template <typename Type>
-Iterator<Type>::Iterator(const Vector<Type> &vector)
+IteratorV<Type>::IteratorV(const Vector<Type> &vector)
 {
     this->wptr = vector.projections;
     this->curIndex = 0;
@@ -48,7 +48,7 @@ Iterator<Type>::Iterator(const Vector<Type> &vector)
 }
 
 template <typename Type>
-Type &Iterator<Type>::operator*()
+Type &IteratorV<Type>::operator*()
 {
     exceptionCheck(__LINE__);
     belongingCheck(__LINE__);
@@ -56,7 +56,7 @@ Type &Iterator<Type>::operator*()
 }
 
 template <typename Type>
-Type *Iterator<Type>::operator->()
+Type *IteratorV<Type>::operator->()
 {
     exceptionCheck(__LINE__);
     belongingCheck(__LINE__);
@@ -64,21 +64,21 @@ Type *Iterator<Type>::operator->()
 }
 
 template <typename Type>
-Iterator<Type>::operator bool() const
+IteratorV<Type>::operator bool() const
 {
-    exceptionCheck(__LINE__);
+    this->exceptionCheck(__LINE__);
     return this->curIndex < this->vectorSize && this->vectorSize != 0;
 }
 
 template <typename Type>
-Iterator<Type> &Iterator<Type>::operator=(const Iterator<Type> &iter)
+IteratorV<Type> &IteratorV<Type>::operator=(const IteratorV<Type> &iter)
 {
     this->wptr = iter->wptr;
     return *this;
 }
 
 template <typename Type>
-Iterator<Type> &Iterator<Type>::operator+=(size_t number)
+IteratorV<Type> &IteratorV<Type>::operator+=(size_t number)
 {
     exceptionCheck(__LINE__);
     this->curIndex += number;
@@ -86,7 +86,7 @@ Iterator<Type> &Iterator<Type>::operator+=(size_t number)
 }
 
 template <typename Type>
-Iterator<Type> Iterator<Type>::operator+(size_t number)
+IteratorV<Type> IteratorV<Type>::operator+(size_t number)
 {
     exceptionCheck(__LINE__);
     (*this) += number;
@@ -94,7 +94,7 @@ Iterator<Type> Iterator<Type>::operator+(size_t number)
 }
 
 template <typename Type>
-Iterator<Type> &Iterator<Type>::operator++()
+IteratorV<Type> &IteratorV<Type>::operator++()
 {
     exceptionCheck(__LINE__);
     (this->curIndex)++;
@@ -102,7 +102,7 @@ Iterator<Type> &Iterator<Type>::operator++()
 }
 
 template <typename Type>
-Iterator<Type> Iterator<Type>::operator++(int)
+IteratorV<Type> IteratorV<Type>::operator++(int)
 {
     exceptionCheck(__LINE__);
     (this->curIndex)++;
@@ -110,7 +110,7 @@ Iterator<Type> Iterator<Type>::operator++(int)
 }
 
 template <typename Type>
-Iterator<Type> &Iterator<Type>::operator-=(size_t number)
+IteratorV<Type> &IteratorV<Type>::operator-=(size_t number)
 {
     exceptionCheck(__LINE__);
     this->curIndex -= number;
@@ -118,7 +118,7 @@ Iterator<Type> &Iterator<Type>::operator-=(size_t number)
 }
 
 template <typename Type>
-Iterator<Type> Iterator<Type>::operator-(size_t number)
+IteratorV<Type> IteratorV<Type>::operator-(size_t number)
 {
     exceptionCheck(__LINE__);
     (*this) -= number;
@@ -126,7 +126,7 @@ Iterator<Type> Iterator<Type>::operator-(size_t number)
 }
 
 template <typename Type>
-Iterator<Type> &Iterator<Type>::operator--()
+IteratorV<Type> &IteratorV<Type>::operator--()
 {
     exceptionCheck(__LINE__);
     (this->curIndex)--;
@@ -134,7 +134,7 @@ Iterator<Type> &Iterator<Type>::operator--()
 }
 
 template <typename Type>
-Iterator<Type> Iterator<Type>::operator--(int)
+IteratorV<Type> IteratorV<Type>::operator--(int)
 {
     exceptionCheck(__LINE__);
     (this->curIndex)--;
@@ -142,42 +142,42 @@ Iterator<Type> Iterator<Type>::operator--(int)
 }
 
 template <typename Type>
-bool Iterator<Type>::operator==(const Iterator<Type> &iter) const
+bool IteratorV<Type>::operator==(const IteratorV<Type> &iter) const
 {
     exceptionCheck(__LINE__);
     return this->curIndex == iter.curIndex;
 }
 
 template <typename Type>
-bool Iterator<Type>::operator!=(const Iterator<Type> &iter) const
+bool IteratorV<Type>::operator!=(const IteratorV<Type> &iter) const
 {
     exceptionCheck(__LINE__);
     return this->curIndex != iter.curIndex;
 }
 
 template <typename Type>
-bool Iterator<Type>::operator<=(const Iterator<Type> &iter) const
+bool IteratorV<Type>::operator<=(const IteratorV<Type> &iter) const
 {
     exceptionCheck(__LINE__);
     return this->curIndex <= iter.curIndex;
 }
 
 template <typename Type>
-bool Iterator<Type>::operator>=(const Iterator<Type> &iter) const
+bool IteratorV<Type>::operator>=(const IteratorV<Type> &iter) const
 {
     exceptionCheck(__LINE__);
     return this->curIndex >= iter.curIndex;
 }
 
 template <typename Type>
-bool Iterator<Type>::operator<(const Iterator<Type> &iter) const
+bool IteratorV<Type>::operator<(const IteratorV<Type> &iter) const
 {
     exceptionCheck(__LINE__);
     return this->curIndex < iter.curIndex;
 }
 
 template <typename Type>
-bool Iterator<Type>::operator>(const Iterator<Type> &iter) const
+bool IteratorV<Type>::operator>(const IteratorV<Type> &iter) const
 {
     exceptionCheck(__LINE__);
     return this->curIndex > iter.curIndex;
