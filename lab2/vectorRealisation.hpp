@@ -319,7 +319,7 @@ Vector<Type> Vector<Type>::sumEl(const Type &el) const
     IteratorV<Type> resIter = result.begin();
     for (; resIter; resIter++, iterFrom++)
         *resIter = *iterFrom + el;
-    return result;
+    return Vector(result);
 }
 
 template <typename Type>
@@ -387,7 +387,7 @@ Vector<Type> Vector<Type>::difVec(const Vector<Type> &vector) const
     ConstIteratorV<Type> iterFrom = vector.begin();
     for (; resIter; resIter++, iterFrom++)
         *resIter = *resIter - *iterFrom;
-    return result;
+    return Vector(result);
 }
 
 template <typename Type>
@@ -415,7 +415,7 @@ Vector<Type> Vector<Type>::difEl(const Type &el) const
     IteratorV<Type> resIter = result.begin();
     for (; resIter; resIter++, iterFrom++)
         *resIter = *iterFrom - el;
-    return result;
+    return Vector(result);
 }
 
 template <typename Type>
@@ -482,7 +482,7 @@ Vector<Type> Vector<Type>::diVec(const Vector<Type> &vector) const
     ConstIteratorV<Type> iterFrom = vector.begin();
     for (; resIter; resIter++, iterFrom++)
         *resIter = *resIter / *iterFrom;
-    return result;
+    return Vector(result);
 }
 
 template <typename Type>
@@ -510,7 +510,7 @@ Vector<Type> Vector<Type>::divEl(const Type &el) const
     IteratorV<Type> resIter = result.begin();
     for (; resIter; resIter++, iterFrom++)
         *resIter = *iterFrom / el;
-    return result;
+    return Vector(result);
 }
 
 template <typename Type>
@@ -575,7 +575,7 @@ void Vector<Type>::checkSizesForMul(const Vector<Type> &vector, int curLine) con
 template <typename Type>
 void Vector<Type>::vecMulEq(const Vector<Type> &vector)
 {
-    this->checkSizesForMul(__LINE__);
+    this->checkSizesForMul(vector, __LINE__);
     Type x = this->projections[1] * vector.projections[2] - this->projections[2] * vector.projections[1];
     Type y = this->projections[2] * vector.projections[0] - this->projections[0] * vector.projections[2];
     Type z = this->projections[0] * vector.projections[1] - this->projections[1] * vector.projections[0];
@@ -597,7 +597,7 @@ Vector<Type> Vector<Type>::operator*(const Vector<Type> &vector) const
     this->checkSizesForMul(vector, __LINE__);
     Vector<Type> result(*this);
     result.vecMulEq(vector);
-    return result;
+    return Vector(result);
 }
 
 template <typename Type>
@@ -606,7 +606,7 @@ Vector<Type> Vector<Type>::vecMulVec(const Vector<Type> &vector) const
     this->checkSizesForMul(vector, __LINE__);
     Vector<Type> result(*this);
     result.vecMulEq(vector);
-    return result;
+    return Vector(result);
 }
 
 
@@ -614,14 +614,13 @@ Vector<Type> Vector<Type>::vecMulVec(const Vector<Type> &vector) const
 template <typename Type>
 void Vector<Type>::vecMulEq(const Type &el)
 {
-    this->checkSizesForMul(__LINE__);
-    this = this->vecMulEl(el);
+    *this = this->vecMulEl(el);
 }
 
 template <typename Type>
 Vector<Type> &Vector<Type>::operator*=(const Type &el)
 {
-    this->vecMulEl(el);
+    *this = this->vecMulEl(el);
     return *this;
 }
 
@@ -648,8 +647,8 @@ Vector<Type> Vector<Type>::vecMulEl(const Type &el) const
     ConstIteratorV<Type> iterFrom = this->begin();
     IteratorV<Type> resIter = result.begin();
     for (; resIter; resIter++, iterFrom++)
-        *resIter = *iterFrom * el;
-    return result;
+        *resIter = (*iterFrom) * el;
+    return Vector(result);
 }
 
 
@@ -663,12 +662,12 @@ Vector<Type> Vector<Type>::skewMulVec(const Vector<Type> &vector) const
         throw EmptyVectorExcpretion(__FILE__, typeid(*this).name(), __LINE__, ctime(&curTime));
     }
     this->checkSizes(vector, __LINE__);
-    Vector<Type> resul(*this);
-    IteratorV<Type> resIter = resul.begin();
+    Vector<Type> result(*this);
+    IteratorV<Type> resIter = result.begin();
     ConstIteratorV<Type> iterFrom = vector.begin();
     for (; resIter; resIter++, iterFrom++)
         *resIter = (*resIter) * (*iterFrom);
-    return resul;
+    return Vector(result);
 }
 
 template <typename Type>
@@ -720,7 +719,7 @@ Type Vector<Type>::scalMulVec(const Vector<Type> &vector) const
     this->checkSizes(vector, __LINE__);
     Type sum = 0;
     Vector<Type> res(*this);
-    res.skewMulVec(vector);
+    res = res.skewMulVec(vector);
     IteratorV<Type> iter = res.begin();
     for (; iter; iter++)
         sum += *iter;
@@ -738,13 +737,13 @@ Vector<Type> Vector<Type>::negative()
     IteratorV<Type> iter = this->begin();
     for (; iter; iter++)
         *iter = - *iter;
-    return *this;
+    return Vector(*this);
 }
 
 template <typename Type>
 Vector<Type> &Vector<Type>::operator-()
 {
-    return this->negative();
+    return Vector(this->negative());
 }
 
 template <typename Type>
