@@ -52,4 +52,6 @@ class ConstIteratorV: public std::iterator<std::random_access_iterator_tag, int>
         size_t vectorSize = 0;
 };
 
+#include "constIteratorRealisation.hpp"
+
 #endif

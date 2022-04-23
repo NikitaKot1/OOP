@@ -122,5 +122,12 @@ int main()
     std::cout<< stringVector(nonOrthVec) << " / 3 = "<< stringVector(nonOrthVec / float(3)) << std::endl;
     std::cout<< stringVector(nonOrthVec) << " * 3 = "<< stringVector(nonOrthVec * float(3)) << std::endl;
 
+    Vector<double> vf = {1.3, 1.4, 1.6};
+    Vector<int> vi = {3, 4, 5};
+    Vector<double> newvf(vf.sumVec(vi));
+    std::cout << "\n<double> vector:" << stringVector(vf) << std::endl;
+    std::cout << "<int> vector:" << stringVector(vi) << std::endl;
+    std::cout << "Sum of <double> vector and <int> vector:\n" << stringVector(newvf) << std::endl;
+
     return 0;
 }

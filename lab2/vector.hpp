@@ -48,60 +48,101 @@ class Vector: public VectorRoot
         const Type &at(size_t pos) const;
         const Type &operator[](size_t pos) const;
 
-        Vector<Type> &operator=(const Vector<Type> &vector);
-        Vector<Type> &operator=(const std::initializer_list<Type> &listForm);
+                // действия с различными типами
+        template <typename TypeIn>
+        Vector<Type> &operator=(const Vector<TypeIn> &vector);
+        template <typename TypeIn>
+        Vector<Type> &operator=(const std::initializer_list<TypeIn> &listForm);
 
         //сумма векторов и вектора с числом
-        Vector<Type> &operator+=(const Vector<Type> &vector);
-        Vector<Type> &operator+=(const Type &el);
-        void sumEq(const Vector<Type> &vector);
-        void sumEq(const Type &el);
-        Vector<Type> operator+(const Vector<Type> &vector) const;
-        Vector<Type> operator+(const Type &el) const;
-        Vector<Type> sumVec(const Vector<Type> &vector) const;
-        Vector<Type> sumEl(const Type &el) const;
+        template <typename TypeIn>
+        Vector<Type> &operator+=(const Vector<TypeIn> &vector);
+        template <typename TypeIn>
+        Vector<Type> &operator+=(const TypeIn &el);
+        template <typename TypeIn>
+        void sumEq(const Vector<TypeIn> &vector);
+        template <typename TypeIn>
+        void sumEq(const TypeIn &el);
+        template <typename TypeIn>
+        Vector<Type> operator+(const Vector<TypeIn> &vector) const;
+        template <typename TypeIn>
+        Vector<Type> operator+(const TypeIn &el) const;
+        template <typename TypeIn>
+        Vector<Type> sumVec(const Vector<TypeIn> &vector) const;
+        template <typename TypeIn>
+        Vector<Type> sumEl(const TypeIn &el) const;
 
         //разница векторов и вектора с числом
-        Vector<Type> &operator-=(const Vector<Type> &vector);
-        Vector<Type> &operator-=(const Type &el);
-        void difEq(const Vector<Type> &vector);
-        void difEq(const Type &el);
-        Vector<Type> operator-(const Vector<Type> &vector) const;
-        Vector<Type> operator-(const Type &el) const;
-        Vector<Type> difVec(const Vector<Type> &vector) const;
-        Vector<Type> difEl(const Type &el) const;
+        template <typename TypeIn>
+        Vector<Type> &operator-=(const Vector<TypeIn> &vector);
+        template <typename TypeIn>
+        Vector<Type> &operator-=(const TypeIn &el);
+        template <typename TypeIn>
+        void difEq(const Vector<TypeIn> &vector);
+        template <typename TypeIn>
+        void difEq(const TypeIn &el);
+        template <typename TypeIn>
+        Vector<Type> operator-(const Vector<TypeIn> &vector) const;
+        template <typename TypeIn>
+        Vector<Type> operator-(const TypeIn &el) const;
+        template <typename TypeIn>
+        Vector<Type> difVec(const Vector<TypeIn> &vector) const;
+        template <typename TypeIn>
+        Vector<Type> difEl(const TypeIn &el) const;
 
         //векторное произведение
-        Vector<Type> &operator*=(const Vector<Type> &vector);
-        void vecMulEq(const Vector<Type> &vector);
-        Vector<Type> operator*(const Vector<Type> &vector) const;
-        Vector<Type> vecMulVec(const Vector<Type> &vector) const;
+        template <typename TypeIn>
+        Vector<Type> &operator*=(const Vector<TypeIn> &vector);
+        template <typename TypeIn>
+        void vecMulEq(const Vector<TypeIn> &vector);
+        template <typename TypeIn>
+        Vector<Type> operator*(const Vector<TypeIn> &vector) const;
+        template <typename TypeIn>
+        Vector<Type> vecMulVec(const Vector<TypeIn> &vector) const;
 
         //произведение вектора на число
-        Vector<Type> &operator*=(const Type &el);
-        void vecMulEq(const Type &el);
-        Vector<Type> operator*(const Type &el) const;
-        Vector<Type> vecMulEl(const Type &el) const;
+        template <typename TypeIn>
+        Vector<Type> &operator*=(const TypeIn &el);
+        template <typename TypeIn>
+        void vecMulEq(const TypeIn &el);
+        template <typename TypeIn>
+        Vector<Type> operator*(const TypeIn &el) const;
+        template <typename TypeIn>
+        Vector<Type> vecMulEl(const TypeIn &el) const;
 
         //скалярное произведение
-        Type operator&(const Vector<Type> &vector) const;
-        Type scalMulVec(const Vector<Type> &vector) const;
+        template <typename TypeIn>
+        Type operator&(const Vector<TypeIn> &vector) const;
+        template <typename TypeIn>
+        Type scalMulVec(const Vector<TypeIn> &vector) const;
 
         //косое произведение
-        Vector<Type> &operator^=(const Vector<Type> &vector);
-        void skewMulEq(const Vector<Type> &vector);
-        Vector<Type> operator^(const Vector<Type> &vector) const;
-        Vector<Type> skewMulVec(const Vector<Type> &vector) const;
+        template <typename TypeIn>
+        Vector<Type> &operator^=(const Vector<TypeIn> &vector);
+        template <typename TypeIn>
+        void skewMulEq(const Vector<TypeIn> &vector);
+        template <typename TypeIn>
+        Vector<Type> operator^(const Vector<TypeIn> &vector) const;
+        template <typename TypeIn>
+        Vector<Type> skewMulVec(const Vector<TypeIn> &vector) const;
 
         //деление вектора на вектор (поэлементно) и на число
-        Vector<Type> &operator/=(const Vector<Type> &vector);
-        Vector<Type> &operator/=(const Type &el);
-        void divEq(const Vector<Type> &vector);
-        void divEq(const Type &el);
-        Vector<Type> operator/(const Vector<Type> &vector) const;
-        Vector<Type> operator/(const Type &el) const;
-        Vector<Type> diVec(const Vector<Type> &vector) const;
-        Vector<Type> divEl(const Type &el) const;
+        template <typename TypeIn>
+        Vector<Type> &operator/=(const Vector<TypeIn> &vector);
+        template <typename TypeIn>
+        Vector<Type> &operator/=(const TypeIn &el);
+        template <typename TypeIn>
+        void divEq(const Vector<TypeIn> &vector);
+        template <typename TypeIn>
+        void divEq(const TypeIn &el);
+        template <typename TypeIn>
+        Vector<Type> operator/(const Vector<TypeIn> &vector) const;
+        template <typename TypeIn>
+        Vector<Type> operator/(const TypeIn &el) const;
+        template <typename TypeIn>
+        Vector<Type> diVec(const Vector<TypeIn> &vector) const;
+        template <typename TypeIn>
+        Vector<Type> divEl(const TypeIn &el) const;
 
         //уножение на -1
         Vector<Type> &operator-();
@@ -114,13 +155,16 @@ class Vector: public VectorRoot
 
     protected:
         void allocMemForVector(size_t size);
-        void checkSizes(const Vector<Type> &vector, int curLine) const;
-        void checkSizesForMul(const Vector<Type> &vector, int curLine) const;
+        template <typename TypeIn>
+        void checkSizes(const Vector<TypeIn> &vector, int curLine) const;
+        template <typename TypeIn>
+        void checkSizesForMul(const Vector<TypeIn> &vector, int curLine) const;
 
     private:
         std::shared_ptr<Type[]> projections;
 };
 
 #include "vectorRealisation.hpp"
+#include "vectorRealiseForArifm.hpp"
 
 #endif
