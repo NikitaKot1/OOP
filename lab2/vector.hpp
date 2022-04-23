@@ -20,9 +20,13 @@ class Vector: public VectorRoot
         Vector();
         explicit Vector(size_t size);
         Vector(size_t size, const Type *arrayPtr);
-        Vector(size_t size, const Type el);
+        Vector(size_t size, const Type &el);
         Vector(const std::initializer_list<Type> &listForm);
-        explicit Vector(const Vector<Type> &vector);
+        template <typename TypeIn>
+        explicit Vector(const Vector<TypeIn> &vector);
+        explicit Vector(const Vector<TypeIn> &&vector);
+        Vector(ConstIteratorV<Type> iter1, ConstIteratorV<iter2> iter2);
+        Vector(ConstIteratorV<Type> iter1, size_t size);
 
         virtual ~Vector() = default;
 
@@ -48,7 +52,7 @@ class Vector: public VectorRoot
         const Type &at(size_t pos) const;
         const Type &operator[](size_t pos) const;
 
-                // действия с различными типами
+        // действия с различными типами
         template <typename TypeIn>
         Vector<Type> &operator=(const Vector<TypeIn> &vector);
         template <typename TypeIn>
@@ -64,13 +68,13 @@ class Vector: public VectorRoot
         template <typename TypeIn>
         void sumEq(const TypeIn &el);
         template <typename TypeIn>
-        Vector<Type> operator+(const Vector<TypeIn> &vector) const;
+        decltype(auto) operator+(const Vector<TypeIn> &vector) const;
         template <typename TypeIn>
-        Vector<Type> operator+(const TypeIn &el) const;
+        decltype(auto) operator+(const TypeIn &el) const;
         template <typename TypeIn>
-        Vector<Type> sumVec(const Vector<TypeIn> &vector) const;
+        decltype(auto) sumVec(const Vector<TypeIn> &vector) const;
         template <typename TypeIn>
-        Vector<Type> sumEl(const TypeIn &el) const;
+        decltype(auto) sumEl(const TypeIn &el) const;
 
         //разница векторов и вектора с числом
         template <typename TypeIn>
@@ -82,13 +86,13 @@ class Vector: public VectorRoot
         template <typename TypeIn>
         void difEq(const TypeIn &el);
         template <typename TypeIn>
-        Vector<Type> operator-(const Vector<TypeIn> &vector) const;
+        decltype(auto) operator-(const Vector<TypeIn> &vector) const;
         template <typename TypeIn>
-        Vector<Type> operator-(const TypeIn &el) const;
+        decltype(auto) operator-(const TypeIn &el) const;
         template <typename TypeIn>
-        Vector<Type> difVec(const Vector<TypeIn> &vector) const;
+        decltype(auto) difVec(const Vector<TypeIn> &vector) const;
         template <typename TypeIn>
-        Vector<Type> difEl(const TypeIn &el) const;
+        decltype(auto) difEl(const TypeIn &el) const;
 
         //векторное произведение
         template <typename TypeIn>
@@ -106,9 +110,9 @@ class Vector: public VectorRoot
         template <typename TypeIn>
         void vecMulEq(const TypeIn &el);
         template <typename TypeIn>
-        Vector<Type> operator*(const TypeIn &el) const;
+        decltype(auto) operator*(const TypeIn &el) const;
         template <typename TypeIn>
-        Vector<Type> vecMulEl(const TypeIn &el) const;
+        decltype(auto) vecMulEl(const TypeIn &el) const;
 
         //скалярное произведение
         template <typename TypeIn>
@@ -122,9 +126,9 @@ class Vector: public VectorRoot
         template <typename TypeIn>
         void skewMulEq(const Vector<TypeIn> &vector);
         template <typename TypeIn>
-        Vector<Type> operator^(const Vector<TypeIn> &vector) const;
+        decltype(auto) operator^(const Vector<TypeIn> &vector) const;
         template <typename TypeIn>
-        Vector<Type> skewMulVec(const Vector<TypeIn> &vector) const;
+        decltype(auto) skewMulVec(const Vector<TypeIn> &vector) const;
 
         //деление вектора на вектор (поэлементно) и на число
         template <typename TypeIn>
@@ -136,13 +140,13 @@ class Vector: public VectorRoot
         template <typename TypeIn>
         void divEq(const TypeIn &el);
         template <typename TypeIn>
-        Vector<Type> operator/(const Vector<TypeIn> &vector) const;
+        decltype(auto) operator/(const Vector<TypeIn> &vector) const;
         template <typename TypeIn>
-        Vector<Type> operator/(const TypeIn &el) const;
+        decltype(auto) operator/(const TypeIn &el) const;
         template <typename TypeIn>
-        Vector<Type> diVec(const Vector<TypeIn> &vector) const;
+        decltype(auto) diVec(const Vector<TypeIn> &vector) const;
         template <typename TypeIn>
-        Vector<Type> divEl(const TypeIn &el) const;
+        decltype(auto) divEl(const TypeIn &el) const;
 
         //уножение на -1
         Vector<Type> &operator-();

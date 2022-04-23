@@ -81,7 +81,7 @@ Vector<Type>::Vector(size_t size, const Type *arrayPtr)
 }
 
 template <typename Type>
-Vector<Type>::Vector(size_t size, const Type el)
+Vector<Type>::Vector(size_t size, const Type &el)
 {
     if (size == 0)
     {
@@ -97,14 +97,15 @@ Vector<Type>::Vector(size_t size, const Type el)
 }
 
 template <typename Type>
-Vector<Type>::Vector(const Vector<Type> &vector):  VectorRoot(vector.sizeV)
+template <typename TypeIn>
+Vector<Type>::Vector(const Vector<TypeIn> &vector)//:  VectorRoot(vector.sizeV)
 {
     this->sizeV = vector.size();
     this->allocMemForVector(sizeV);
     IteratorV<Type> iter = this->begin();
-    ConstIteratorV<Type> iterFrom = vector.begin();
+    ConstIteratorV<TypeIn> iterFrom = vector.begin();
     for (; iter; iter++, iterFrom++)
-        *iter = *iterFrom;
+        *iter = Type(*iterFrom);
 }
 
 template <typename Type>
@@ -168,7 +169,7 @@ TypeOut Vector<Type>::lenght() const
 template <typename Type>
 bool Vector<Type>::isZeroVector() const
 {
-    return this->lenght<Type>() < __FLT_EPSILON__;
+    return this->lenght<double>() < __FLT_EPSILON__;
 }
 
 template <typename Type>

@@ -54,7 +54,7 @@ Vector<Type> &Vector<Type>::operator=(const std::initializer_list<TypeIn> &listF
 
 template <typename Type>
 template <typename TypeIn>
-Vector<Type> Vector<Type>::sumVec(const Vector<TypeIn> &vector) const
+decltype(auto) Vector<Type>::sumVec(const Vector<TypeIn> &vector) const
 {
     if (this->sizeV == 0 || vector.size() == 0)
     {
@@ -62,11 +62,11 @@ Vector<Type> Vector<Type>::sumVec(const Vector<TypeIn> &vector) const
         throw EmptyVectorExcpretion(__FILE__, typeid(*this).name(), __LINE__, ctime(&curTime));
     }
     this->checkSizes(vector, __LINE__);
-    Vector<Type> result(*this);
-    IteratorV<Type> resIter = result.begin();
+    Vector<decltype((*this)[0] + vector[0])> result(*this);
+    IteratorV<decltype((*this)[0] + vector[0])> resIter = result.begin();
     ConstIteratorV<TypeIn> iterFrom = vector.begin();
     for (; resIter; resIter++, iterFrom++)
-        *resIter = *resIter + Type(*iterFrom);
+        *resIter = *resIter + *iterFrom;
     return Vector(result);
 }
 
@@ -85,18 +85,18 @@ void Vector<Type>::sumEq(const Vector<TypeIn> &vector)
 
 template <typename Type>
 template <typename TypeIn>
-Vector<Type> Vector<Type>::sumEl(const TypeIn &el) const
+decltype(auto) Vector<Type>::sumEl(const TypeIn &el) const
 {
     if (this->sizeV == 0)
     {
         time_t curTime = time(NULL);
         throw EmptyVectorExcpretion(__FILE__, typeid(*this).name(), __LINE__, ctime(&curTime));
     }
-    Vector<Type> result(*this);
+    Vector<decltype((*this)[0] + el)> result(*this);
     ConstIteratorV<Type> iterFrom = this->begin();
-    IteratorV<Type> resIter = result.begin();
+    IteratorV<decltype((*this)[0] + el)> resIter = result.begin();
     for (; resIter; resIter++, iterFrom++)
-        *resIter = *iterFrom + Type(el);
+        *resIter = *iterFrom + el;
     return Vector(result);
 }
 
@@ -130,7 +130,7 @@ Vector<Type> &Vector<Type>::operator+=(const TypeIn &el)
 
 template <typename Type>
 template <typename TypeIn>
-Vector<Type> Vector<Type>::operator+(const Vector<TypeIn> &vector) const
+decltype(auto) Vector<Type>::operator+(const Vector<TypeIn> &vector) const
 {
     if (this->sizeV == 0 || vector.size() == 0)
     {
@@ -143,7 +143,7 @@ Vector<Type> Vector<Type>::operator+(const Vector<TypeIn> &vector) const
 
 template <typename Type>
 template <typename TypeIn>
-Vector<Type> Vector<Type>::operator+(const TypeIn &el) const
+decltype(auto) Vector<Type>::operator+(const TypeIn &el) const
 {
     if (this->sizeV == 0)
     {
@@ -158,7 +158,7 @@ Vector<Type> Vector<Type>::operator+(const TypeIn &el) const
 
 template <typename Type>
 template <typename TypeIn>
-Vector<Type> Vector<Type>::difVec(const Vector<TypeIn> &vector) const
+decltype(auto) Vector<Type>::difVec(const Vector<TypeIn> &vector) const
 {
     if (this->sizeV == 0 || vector.size() == 0)
     {
@@ -166,11 +166,11 @@ Vector<Type> Vector<Type>::difVec(const Vector<TypeIn> &vector) const
         throw EmptyVectorExcpretion(__FILE__, typeid(*this).name(), __LINE__, ctime(&curTime));
     }
     this->checkSizes(vector, __LINE__);
-    Vector<Type> result(*this);
+    Vector<decltype((*this)[0] + vector[0])> result(*this);
     IteratorV<Type> resIter = result.begin();
-    ConstIteratorV<TypeIn> iterFrom = vector.begin();
+    ConstIteratorV<decltype((*this)[0] + vector[0])> iterFrom = vector.begin();
     for (; resIter; resIter++, iterFrom++)
-        *resIter = *resIter - Type(*iterFrom);
+        *resIter = *resIter - *iterFrom;
     return Vector(result);
 }
 
@@ -189,18 +189,18 @@ void Vector<Type>::difEq(const Vector<TypeIn> &vector)
 
 template <typename Type>
 template <typename TypeIn>
-Vector<Type> Vector<Type>::difEl(const TypeIn &el) const
+decltype(auto) Vector<Type>::difEl(const TypeIn &el) const
 {
     if (this->sizeV == 0)
     {
         time_t curTime = time(NULL);
         throw EmptyVectorExcpretion(__FILE__, typeid(*this).name(), __LINE__, ctime(&curTime));
     }
-    Vector<Type> result(*this);
+    Vector<decltype((*this)[0] + el)> result(*this);
     ConstIteratorV<Type> iterFrom = this->begin();
-    IteratorV<Type> resIter = result.begin();
+    IteratorV<decltype((*this)[0] + el)> resIter = result.begin();
     for (; resIter; resIter++, iterFrom++)
-        *resIter = *iterFrom - Type(el);
+        *resIter = *iterFrom - el;
     return Vector(result);
 }
 
@@ -234,7 +234,7 @@ Vector<Type> &Vector<Type>::operator-=(const TypeIn &el)
 
 template <typename Type>
 template <typename TypeIn>
-Vector<Type> Vector<Type>::operator-(const Vector<TypeIn> &vector) const
+decltype(auto) Vector<Type>::operator-(const Vector<TypeIn> &vector) const
 {
     if (this->sizeV == 0 || vector.size() == 0)
     {
@@ -247,7 +247,7 @@ Vector<Type> Vector<Type>::operator-(const Vector<TypeIn> &vector) const
 
 template <typename Type>
 template <typename TypeIn>
-Vector<Type> Vector<Type>::operator-(const TypeIn &el) const
+decltype(auto) Vector<Type>::operator-(const TypeIn &el) const
 {
     if (this->sizeV == 0)
     {
@@ -261,7 +261,7 @@ Vector<Type> Vector<Type>::operator-(const TypeIn &el) const
 
 template <typename Type>
 template <typename TypeIn>
-Vector<Type> Vector<Type>::diVec(const Vector<TypeIn> &vector) const
+decltype(auto) Vector<Type>::diVec(const Vector<TypeIn> &vector) const
 {
     if (this->sizeV == 0 || vector.size() == 0)
     {
@@ -269,11 +269,11 @@ Vector<Type> Vector<Type>::diVec(const Vector<TypeIn> &vector) const
         throw EmptyVectorExcpretion(__FILE__, typeid(*this).name(), __LINE__, ctime(&curTime));
     }
     this->checkSizes(vector, __LINE__);
-    Vector<Type> result(*this);
-    IteratorV<Type> resIter = result.begin();
+    Vector<decltype((*this)[0] / vector[0])> result(*this);
+    IteratorV<decltype((*this)[0] / vector[0])> resIter = result.begin();
     ConstIteratorV<TypeIn> iterFrom = vector.begin();
     for (; resIter; resIter++, iterFrom++)
-        *resIter = *resIter / Type(*iterFrom);
+        *resIter = *resIter / *iterFrom;
     return Vector(result);
 }
 
@@ -292,18 +292,18 @@ void Vector<Type>::divEq(const Vector<TypeIn> &vector)
 
 template <typename Type>
 template <typename TypeIn>
-Vector<Type> Vector<Type>::divEl(const TypeIn &el) const
+decltype(auto) Vector<Type>::divEl(const TypeIn &el) const
 {
     if (this->sizeV == 0)
     {
         time_t curTime = time(NULL);
         throw EmptyVectorExcpretion(__FILE__, typeid(*this).name(), __LINE__, ctime(&curTime));
     }
-    Vector<Type> result(*this);
+    Vector<decltype((*this)[0] / el)> result(*this);
     ConstIteratorV<Type> iterFrom = this->begin();
-    IteratorV<Type> resIter = result.begin();
+    IteratorV<decltype((*this)[0] / el)> resIter = result.begin();
     for (; resIter; resIter++, iterFrom++)
-        *resIter = *iterFrom / Type(el);
+        *resIter = *iterFrom / el;
     return Vector(result);
 }
 
@@ -337,7 +337,7 @@ Vector<Type> &Vector<Type>::operator/=(const TypeIn &el)
 
 template <typename Type>
 template <typename TypeIn>
-Vector<Type> Vector<Type>::operator/(const Vector<TypeIn> &vector) const
+decltype(auto) Vector<Type>::operator/(const Vector<TypeIn> &vector) const
 {
     if (this->sizeV == 0 || vector.size() == 0)
     {
@@ -350,7 +350,7 @@ Vector<Type> Vector<Type>::operator/(const Vector<TypeIn> &vector) const
 
 template <typename Type>
 template <typename TypeIn>
-Vector<Type> Vector<Type>::operator/(const TypeIn &el) const
+decltype(auto) Vector<Type>::operator/(const TypeIn &el) const
 {
     if (this->sizeV == 0)
     {
@@ -432,7 +432,7 @@ Vector<Type> &Vector<Type>::operator*=(const TypeIn &el)
 
 template <typename Type>
 template <typename TypeIn>
-Vector<Type> Vector<Type>::operator*(const TypeIn &el) const
+decltype(auto) Vector<Type>::operator*(const TypeIn &el) const
 {
     if (this->sizeV == 0)
     {
@@ -444,18 +444,18 @@ Vector<Type> Vector<Type>::operator*(const TypeIn &el) const
 
 template <typename Type>
 template <typename TypeIn>
-Vector<Type> Vector<Type>::vecMulEl(const TypeIn &el) const
+decltype(auto) Vector<Type>::vecMulEl(const TypeIn &el) const
 {
     if (this->sizeV == 0)
     {
         time_t curTime = time(NULL);
         throw EmptyVectorExcpretion(__FILE__, typeid(*this).name(), __LINE__, ctime(&curTime));
     }
-    Vector<Type> result(*this);
+    Vector<decltype((*this)[0] * el)> result(*this);
     ConstIteratorV<Type> iterFrom = this->begin();
-    IteratorV<Type> resIter = result.begin();
+    IteratorV<decltype((*this)[0] * el)> resIter = result.begin();
     for (; resIter; resIter++, iterFrom++)
-        *resIter = (*iterFrom) * Type(el);
+        *resIter = (*iterFrom) * el;
     return Vector(result);
 }
 
@@ -463,7 +463,7 @@ Vector<Type> Vector<Type>::vecMulEl(const TypeIn &el) const
 
 template <typename Type>
 template <typename TypeIn>
-Vector<Type> Vector<Type>::skewMulVec(const Vector<TypeIn> &vector) const
+decltype(auto) Vector<Type>::skewMulVec(const Vector<TypeIn> &vector) const
 {
     if (this->sizeV == 0 || vector.size() == 0)
     {
@@ -471,11 +471,11 @@ Vector<Type> Vector<Type>::skewMulVec(const Vector<TypeIn> &vector) const
         throw EmptyVectorExcpretion(__FILE__, typeid(*this).name(), __LINE__, ctime(&curTime));
     }
     this->checkSizes(vector, __LINE__);
-    Vector<Type> result(*this);
-    IteratorV<Type> resIter = result.begin();
+    Vector<decltype((*this)[0] * vector[0])> result(*this);
+    IteratorV<decltype((*this)[0] * vector[0])> resIter = result.begin();
     ConstIteratorV<TypeIn> iterFrom = vector.begin();
     for (; resIter; resIter++, iterFrom++)
-        *resIter = (*resIter) * Type(*iterFrom);
+        *resIter = (*resIter) * *iterFrom;
     return Vector(result);
 }
 
@@ -502,7 +502,7 @@ Vector<Type> &Vector<Type>::operator^=(const Vector<TypeIn> &vector)
 
 template <typename Type>
 template <typename TypeIn>
-Vector<Type> Vector<Type>::operator^(const Vector<TypeIn> &vector) const
+decltype(auto) Vector<Type>::operator^(const Vector<TypeIn> &vector) const
 {
     if (this->sizeV == 0 || vector.size() == 0)
     {

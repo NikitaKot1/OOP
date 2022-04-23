@@ -40,7 +40,7 @@ int main()
     Vector<float> nonOrthVec = {1, 2, 3};
 
     std::cout<< "\nShould be perpendicular: "<< orthVecF.perpendicular(orthVecS) << std::endl;
-    std::cout<< "Shouldn't be perpendicular: "<<orthVecF.perpendicular(nonOrthVec) << std::endl;
+    //std::cout<< "Shouldn't be perpendicular: "<<orthVecF.perpendicular(nonOrthVec) << std::endl;
 
     Vector<int> colVecF = {1, 0, 0};
     Vector<int> colVecS = {1, 0, 0};
@@ -128,6 +128,9 @@ int main()
     std::cout << "\n<double> vector:" << stringVector(vf) << std::endl;
     std::cout << "<int> vector:" << stringVector(vi) << std::endl;
     std::cout << "Sum of <double> vector and <int> vector:\n" << stringVector(newvf) << std::endl;
+
+    std::cout << stringVector(vf + vi) << std::endl;
+    std::cout << stringVector(vi + vf) << std::endl;
 
     return 0;
 }
