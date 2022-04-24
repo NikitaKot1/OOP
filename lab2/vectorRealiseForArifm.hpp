@@ -53,6 +53,16 @@ Vector<Type> &Vector<Type>::operator=(const std::initializer_list<TypeIn> &listF
 }
 
 template <typename Type>
+Vector<Type> &Vector<Type>::operator=(const Vector<Type> &&vector)
+{
+    this->sizeV = vector.size();
+    this->allocMemForVector(sizeV);
+    this->projections = vector.projections;
+    vector.projections.reset();
+    return *this;
+}
+
+template <typename Type>
 template <typename TypeIn>
 decltype(auto) Vector<Type>::sumVec(const Vector<TypeIn> &vector) const
 {
@@ -67,7 +77,7 @@ decltype(auto) Vector<Type>::sumVec(const Vector<TypeIn> &vector) const
     ConstIteratorV<TypeIn> iterFrom = vector.begin();
     for (; resIter; resIter++, iterFrom++)
         *resIter = *resIter + *iterFrom;
-    return Vector(result);
+    return result;
 }
 
 template <typename Type>
@@ -97,7 +107,7 @@ decltype(auto) Vector<Type>::sumEl(const TypeIn &el) const
     IteratorV<decltype((*this)[0] + el)> resIter = result.begin();
     for (; resIter; resIter++, iterFrom++)
         *resIter = *iterFrom + el;
-    return Vector(result);
+    return result;
 }
 
 template <typename Type>
@@ -171,7 +181,7 @@ decltype(auto) Vector<Type>::difVec(const Vector<TypeIn> &vector) const
     ConstIteratorV<decltype((*this)[0] + vector[0])> iterFrom = vector.begin();
     for (; resIter; resIter++, iterFrom++)
         *resIter = *resIter - *iterFrom;
-    return Vector(result);
+    return result;
 }
 
 template <typename Type>
@@ -201,7 +211,7 @@ decltype(auto) Vector<Type>::difEl(const TypeIn &el) const
     IteratorV<decltype((*this)[0] + el)> resIter = result.begin();
     for (; resIter; resIter++, iterFrom++)
         *resIter = *iterFrom - el;
-    return Vector(result);
+    return result;
 }
 
 template <typename Type>
@@ -274,7 +284,7 @@ decltype(auto) Vector<Type>::diVec(const Vector<TypeIn> &vector) const
     ConstIteratorV<TypeIn> iterFrom = vector.begin();
     for (; resIter; resIter++, iterFrom++)
         *resIter = *resIter / *iterFrom;
-    return Vector(result);
+    return result;
 }
 
 template <typename Type>
@@ -304,7 +314,7 @@ decltype(auto) Vector<Type>::divEl(const TypeIn &el) const
     IteratorV<decltype((*this)[0] / el)> resIter = result.begin();
     for (; resIter; resIter++, iterFrom++)
         *resIter = *iterFrom / el;
-    return Vector(result);
+    return result;
 }
 
 template <typename Type>
@@ -400,7 +410,7 @@ Vector<Type> Vector<Type>::operator*(const Vector<TypeIn> &vector) const
     this->checkSizesForMul(vector, __LINE__);
     Vector<Type> result(*this);
     result.vecMulEq(vector);
-    return Vector(result);
+    return result;
 }
 
 template <typename Type>
@@ -410,7 +420,7 @@ Vector<Type> Vector<Type>::vecMulVec(const Vector<TypeIn> &vector) const
     this->checkSizesForMul(vector, __LINE__);
     Vector<Type> result(*this);
     result.vecMulEq(vector);
-    return Vector(result);
+    return result;
 }
 
 
@@ -456,7 +466,7 @@ decltype(auto) Vector<Type>::vecMulEl(const TypeIn &el) const
     IteratorV<decltype((*this)[0] * el)> resIter = result.begin();
     for (; resIter; resIter++, iterFrom++)
         *resIter = (*iterFrom) * el;
-    return Vector(result);
+    return result;
 }
 
 
@@ -476,7 +486,7 @@ decltype(auto) Vector<Type>::skewMulVec(const Vector<TypeIn> &vector) const
     ConstIteratorV<TypeIn> iterFrom = vector.begin();
     for (; resIter; resIter++, iterFrom++)
         *resIter = (*resIter) * *iterFrom;
-    return Vector(result);
+    return result;
 }
 
 template <typename Type>

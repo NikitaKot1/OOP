@@ -183,4 +183,28 @@ bool IteratorV<Type>::operator>(const IteratorV<Type> &iter) const
     return this->curIndex > iter.curIndex;
 }
 
+template <typename Type>
+Type &IteratorV<Type>::operator[](const size_t index)
+{
+    exceptionCheck(__LINE__);
+    if (index + this->curIndex >= this->vectorSize)
+    {
+        time_t curTime = time(NULL);
+        throw InvalidIteratorException(__FILE__, typeid(*this).name(), __LINE__, ctime(&curTime));
+    }
+    return *(this + index);
+}
+
+template <typename Type>
+const Type &IteratorV<Type>::operator[](const size_t index) const
+{
+    exceptionCheck(__LINE__);
+    if (index + this->curIndex >= this->vectorSize)
+    {
+        time_t curTime = time(NULL);
+        throw InvalidIteratorException(__FILE__, typeid(*this).name(), __LINE__, ctime(&curTime));
+    }
+    return *(this + index);
+}
+
 #endif

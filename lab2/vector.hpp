@@ -24,8 +24,8 @@ class Vector: public VectorRoot
         Vector(const std::initializer_list<Type> &listForm);
         template <typename TypeIn>
         explicit Vector(const Vector<TypeIn> &vector);
-        explicit Vector(const Vector<TypeIn> &&vector);
-        Vector(ConstIteratorV<Type> iter1, ConstIteratorV<iter2> iter2);
+        Vector(Vector<Type> &&vector) noexcept;
+        Vector(ConstIteratorV<Type> iter1, ConstIteratorV<Type> iter2);
         Vector(ConstIteratorV<Type> iter1, size_t size);
 
         virtual ~Vector() = default;
@@ -52,11 +52,14 @@ class Vector: public VectorRoot
         const Type &at(size_t pos) const;
         const Type &operator[](size_t pos) const;
 
+        void setEl(size_t pos, const Type &el);
+
         // действия с различными типами
         template <typename TypeIn>
         Vector<Type> &operator=(const Vector<TypeIn> &vector);
         template <typename TypeIn>
         Vector<Type> &operator=(const std::initializer_list<TypeIn> &listForm);
+        Vector<Type> &operator=(const Vector<Type> &&vector);
 
         //сумма векторов и вектора с числом
         template <typename TypeIn>
@@ -149,7 +152,7 @@ class Vector: public VectorRoot
         decltype(auto) divEl(const TypeIn &el) const;
 
         //уножение на -1
-        Vector<Type> &operator-();
+        Vector<Type> operator-();
         Vector<Type> negative();
 
         bool operator==(const Vector<Type> &vector) const;

@@ -109,6 +109,33 @@ Vector<Type>::Vector(const Vector<TypeIn> &vector)//:  VectorRoot(vector.sizeV)
 }
 
 template <typename Type>
+Vector<Type>::Vector(Vector<Type> &&vector) noexcept: VectorRoot(vector.sizeV)
+{
+    this->projections = vector.projections;
+    vector.projections.reset();
+}
+
+template <typename Type>
+Vector<Type>::Vector(ConstIteratorV<Type> iter1, ConstIteratorV<Type> iter2)
+{
+    this->sizeV = iter2.curIndex - iter1.curIndex;
+    this->allocMemForVector(this->sizeV);
+    IteratorV<Type> iter = this->begin();
+    for (; iter; iter++, iter1++)
+        *iter = *iter1;
+}
+
+template <typename Type>
+Vector<Type>::Vector(ConstIteratorV<Type> iter1, size_t size)
+{
+    this->sizeV = size;
+    this->allocMemForVector(this->sizeV);
+    IteratorV<Type> iter = this->begin();
+    for (; iter; iter++, iter1++)
+        *iter = *iter1;
+}
+
+template <typename Type>
 IteratorV<Type> Vector<Type>::begin()
 {
     IteratorV<Type> iter(*this);
@@ -257,7 +284,7 @@ Vector<Type> Vector<Type>::negative()
 }
 
 template <typename Type>
-Vector<Type> &Vector<Type>::operator-()
+Vector<Type> Vector<Type>::operator-()
 {
     return Vector(this->negative());
 }
@@ -292,6 +319,12 @@ template <typename Type>
 bool Vector<Type>::operator!=(const Vector<Type> &vector) const
 {
     return this->isNotEqual(vector);
+}
+
+template <typename Type>
+void Vector<Type>::setEl(size_t pos, const Type &el)
+{
+    (*this)[pos] = el;
 }
 
 #endif

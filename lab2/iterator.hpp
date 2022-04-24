@@ -42,6 +42,9 @@ class IteratorV: public std::iterator<std::random_access_iterator_tag, int>
         bool operator>=(const IteratorV<Type> &iter) const;
         bool operator<(const IteratorV<Type> &iter) const;
         bool operator>(const IteratorV<Type> &iter) const;
+
+        Type &operator[](const size_t index);
+        const Type &operator[](const size_t index) const;
     
     private:
         std::weak_ptr<Type[]> wptr;
