@@ -12,8 +12,6 @@ Elevator::Elevator(size_t floor_n, QWidget *parent):
 
     QWidget::connect(&_controller, SIGNAL(request_visit(int)),
                      &_cabine, SLOT(request_waiting(int)));
-    QWidget::connect(&_controller, SIGNAL(request_visit(int)),
-                     &_cabine, SLOT(doors_waiting(int)));
 
     QWidget::connect(&_cabine, SIGNAL(dest_get(int, Direction)),
                      &_controller, SLOT(floor_visited(int, Direction)));

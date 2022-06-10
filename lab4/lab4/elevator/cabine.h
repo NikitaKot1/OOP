@@ -15,8 +15,7 @@ class Cabine: public QObject
         STARTING,
         MOVE,
         STOPING,
-        REQUEST_WAIT,
-        CLOSING_WAIT
+        REQUEST_WAIT
     };
 
 public:
@@ -34,7 +33,6 @@ signals:
 
 public slots:
     void request_waiting(int floor=0);
-    void doors_waiting(int floor);
 
 private slots:
     void stoped();
